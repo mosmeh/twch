@@ -63,7 +63,7 @@ impl TryFrom<irc::proto::Message> for TwitchMessage {
 
             let content = if let Some(stripped) = content.strip_prefix("\u{1}ACTION ") {
                 is_action = true;
-                stripped.strip_suffix("\u{1}").unwrap_or(stripped)
+                stripped.strip_suffix('\u{1}').unwrap_or(stripped)
             } else {
                 content
             };
