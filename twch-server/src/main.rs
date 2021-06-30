@@ -36,7 +36,7 @@ async fn main() -> std::io::Result<()> {
 
     let config = Config::from_env().unwrap();
 
-    let http_addr = std::env::var("HTTP_ADDR").unwrap_or("0.0.0.0:8080".to_owned());
+    let http_addr = std::env::var("HTTP_ADDR").unwrap_or_else(|_| "0.0.0.0:8080".to_owned());
     eprintln!("Listening on http://{}", http_addr);
 
     HttpServer::new(move || {
@@ -116,7 +116,7 @@ async fn start_channel_stream(
 ) -> actix_web::Result<impl Responder> {
     let mut stream = twch::TwitchChannelStream::new(&channel)
         .await
-        .map_err(|e| error::ErrorInternalServerError(e))?;
+        .map_err(error::ErrorInternalServerError)?;
     let mut interval = actix_web::rt::time::interval(config.heartbeat_interval);
 
     let stream =
